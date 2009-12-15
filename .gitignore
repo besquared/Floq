@@ -1,0 +1,4 @@
+*.o
+*.dylib
+*.tcb
+floq-test
