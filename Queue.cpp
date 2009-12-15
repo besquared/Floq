@@ -13,6 +13,7 @@ bool Queue::Push(const vector<string>& topics, const string& message) {
   for(size_t i = 0; i < count; i++) {
     if(!BDB::PutDup(topics[i], message)) {
       BDB::TransactionAbort();
+      return false;
     }
   }
   
