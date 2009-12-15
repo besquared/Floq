@@ -1,0 +1,19 @@
+Just me messing around, last night it occurred to me that a b+tree is 
+the perfect data structure for a basic message queue. Using tokyo cabinet 
+this message queue supports a few things:
+
+1) Fast
+   Several hundred thousands messages/sec depending on their size
+
+2) Durable
+   Tokyo cabinet is memory mapped, this is still dependent on the mmap 
+   implementation, but is durable enough for most people.
+
+3) Topics
+   Since the b+tree can hold lists of values for any key we can easily 
+   implement multiple topic queues in the same file.
+
+4) Transactional Fanout/Replication
+   Tokyo cabinet exposes transactions on top of the memory mapped file, this
+   Allows us to replicate the same message to multiple topic queues and 
+   guarantee that either they all get written or none of them get written.
