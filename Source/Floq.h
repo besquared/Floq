@@ -1,5 +1,5 @@
-#ifndef _floq_h_
-#define _floq_h_
+#ifndef _floq_floq_h_
+#define _floq_floq_h_
 
 #include "Queue.h"
 
