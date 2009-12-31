@@ -1,5 +1,5 @@
-#ifndef _common_included_
-#define _common_included_
+#ifndef _floq_common_h_
+#define _floq_common_h_
 
 #include <tcutil.h>
 #include <tcbdb.h>
@@ -13,7 +13,5 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
-
-using namespace std;
 
 #endif

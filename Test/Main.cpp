@@ -1,21 +1,22 @@
-#include "Floq.h"
-
+#include <Floq.h>
 #include <boost/timer.hpp>
 
 int main() {
   boost::timer t;
   
-  Queue q(".", "myqueue");
+  Floq::Queue q("./Test", "myqueue");
   
   q.OpenWriter();
   
   t.restart();
   
-  int message_count = 10;
+  int message_count = 100000;
   
+  vector<string> messages;
   for(int i = 0; i < message_count; i++) {
-    q.Push("insertions", "this is my message, lets see how fast it is now");
+    messages.push_back("this is my message, lets see how fast it is now");
   }
+  q.Push("insertions", messages);
   
   cout << "Queue size is now " <<  q.Size("insertions") << endl;
   cout << "Pushed " << message_count << " objects in " << t.elapsed() << " seconds" << endl;

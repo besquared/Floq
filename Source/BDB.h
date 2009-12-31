@@ -1,9 +1,11 @@
-#ifndef _bdb_included_
-#define _bdb_included_
+#ifndef _flow_bdb_h_
+#define _floq_bdb_h_
 
 #include "Common.h"
 
-namespace Flow {
+using namespace std;
+
+namespace Floq {
 	class BDB {
 	protected:
 		string path;
@@ -12,7 +14,7 @@ namespace Flow {
 		
 	public:		
 		BDB(const string& path, const string& name);
-		~BDB();
+		virtual ~BDB();
 		
 		bool OpenReader();
 		bool OpenWriter();

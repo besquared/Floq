@@ -1,6 +1,6 @@
 #include "BDB.h"
 
-using namespace Flow;
+using namespace Floq;
 
 BDB::BDB(const string& path, const string& name) {
 	this->path = path;
@@ -52,11 +52,7 @@ bool BDB::Open(int mode) {
 	return tcbdbopen(this->database, BDB::Path(this->path, this->name).c_str(), mode);
 }
 
-bool BDB::Close() {
-	if(tcbdbrnum(this->database) % (1<<16) == 0) {
-		tcbdboptimize(database, -1, -1, -1, -1, -1, BDBTLARGE | BDBTDEFLATE);
-	}
-	
+bool BDB::Close() {	
 	return tcbdbclose(this->database);
 }
 
