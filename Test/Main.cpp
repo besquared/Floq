@@ -10,7 +10,7 @@ int main() {
   
   t.restart();
   
-  int message_count = 100000;
+  int message_count = 10;
   
   vector<string> messages;
   for(int i = 0; i < message_count; i++) {
@@ -24,12 +24,12 @@ int main() {
   t.restart();
   
   string insertion;
-  for(int i = 0; i < message_count; i++) {
+  for(int i = 0; i < message_count + 1; i++) {
     q.Get("insertions", insertion);
   }
   
   cout << "Queue size is now " <<  q.Size("insertions") << endl;
-  cout << "Got objects in " << t.elapsed() << " seconds" << endl;
+  cout << "Got " << message_count << " objects in " << t.elapsed() << " seconds" << endl;
   
   q.Close();
   
