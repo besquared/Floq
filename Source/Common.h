@@ -1,6 +1,7 @@
 #ifndef _floq_common_h_
 #define _floq_common_h_
 
+#include <tcutil.h>
 #include <tcbdb.h>
 
 #include <stdlib.h>

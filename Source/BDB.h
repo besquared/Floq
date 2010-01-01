@@ -11,7 +11,8 @@ namespace Floq {
 		string path;
 		string name;
 		TCBDB *database;
-		
+		pthread_mutex_t mutex;
+    
 	public:		
 		BDB(const string& path, const string& name);
 		virtual ~BDB();
@@ -22,7 +23,12 @@ namespace Floq {
 		bool Close();
 		bool Truncate();
 		
-		bool Get(const string& key, string& result);		
+		void Lock();
+    void Unlock();
+    
+		bool Get(const string& key, string& result);	
+    bool Get(BDBCUR* cursor, string& result);
+    bool Get(const string& key, vector<string>& results);
 		bool Put(const string& key, const string& value);
 		bool PutDup(const string& key, const string& value);
 		bool Add(const string& key, const int value, int& result);

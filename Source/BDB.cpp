@@ -6,11 +6,13 @@ BDB::BDB(const string& path, const string& name) {
 	this->path = path;
 	this->name = name;
 	this->database = tcbdbnew();
+  pthread_mutex_init(&this->mutex, NULL);
 }
 
 BDB::~BDB() {
 	this->Close();
   tcbdbdel(this->database);
+  pthread_mutex_destroy(&this->mutex);
 }
 
 bool BDB::Create(const string& path, const string& name) {
@@ -56,11 +58,51 @@ bool BDB::Close() {
 	return tcbdbclose(this->database);
 }
 
+void Floq::BDB::Lock() {
+  pthread_mutex_lock(&this->mutex);
+}
+
+void Floq::BDB::Unlock() {
+  pthread_mutex_unlock(&this->mutex);
+}
+
 bool BDB::Get(const string& key, string& result) {
 	int b_size;
 	void* buffer;
 	
 	buffer = tcbdbget(this->database, key.c_str(), key.size(), &b_size);
+	
+	if(buffer == NULL) {
+		return false;
+	} else {
+		result.assign((char*)buffer, b_size);
+		free(buffer);
+		return true;
+	}
+}
+
+bool BDB::Get(const string& key, vector<string>& results) {
+	TCLIST* values = tcbdbget4(this->database, key.c_str(), key.size());
+	
+	if(values != NULL) {
+		const char* value;
+		size_t list_size = tclistnum(values);
+    for(size_t i = 0; i < list_size; i++) {
+			value = tclistval2(values, i);
+			if(value != NULL) { results.push_back(value); }
+    }
+    tclistdel(values);
+		return true;
+  } else {
+		return false;
+	}
+}
+
+bool BDB::Get(BDBCUR* cursor, string& result) {
+	int b_size;
+	void* buffer;
+	
+	buffer = tcbdbcurval(cursor, &b_size);
 	
 	if(buffer == NULL) {
 		return false;

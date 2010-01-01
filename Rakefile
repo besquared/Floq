@@ -1,4 +1,4 @@
-task :default => 'build:test'
+task :default => 'build:test:all'
 
 namespace :build do
   task :release do
@@ -6,7 +6,15 @@ namespace :build do
     system("g++ -dynamiclib -W1 -o Build/libfloq.dylib *.o -ltokyocabinet -lpthread")
   end
   
-  task :test => :release do
-    system('g++ -o floq-test Test/Main.cpp -L./Build -I./Source -ltokyocabinet -lfloq')
+  namespace :test do
+    task :queue => :release do
+      system('g++ -o Test/Build/queue-test Test/QueueTest.cpp -L./Build -I./Source -ltokyocabinet -lfloq')
+    end
+    
+    task :sets => :release do
+      system('g++ -o Test/Build/sets-test Test/SetsTest.cpp -L./Build -I./Source -ltokyocabinet -lfloq')
+    end
+    
+    task :all => [:queue, :sets]
   end
 end

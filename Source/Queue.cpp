@@ -1,30 +1,13 @@
 #include "Queue.h"
 
-Floq::Queue::Queue(const string& path, const string& name) : 
-Floq::BDB::BDB(path, name) {
-  if(pthread_mutex_init(&this->mutex, NULL) != 0) {
-    throw "Could not initialize queue mutex.";
-  }
-}
-
-Floq::Queue::~Queue() {
-  pthread_mutex_destroy(&this->mutex);
-}
-
-void Floq::Queue::Lock() {
-  pthread_mutex_lock(&this->mutex);
-}
-
-void Floq::Queue::Unlock() {
-  pthread_mutex_unlock(&this->mutex);
-}
+Floq::Queue::Queue(const string& path, const string& name) : Floq::BDB::BDB(path, name) {}
 
 bool Floq::Queue::Push(const string& topic, const string& message) {
   bool result = false;
 
-  this->Lock();
+  Floq::BDB::Lock();
   result = Floq::BDB::PutDup(topic, message);
-  this->Unlock();
+  Floq::BDB::Unlock();
   
   return result;
 }
@@ -33,7 +16,7 @@ bool Floq::Queue::Push(const string& topic, const vector<string>& messages) {
   bool result = false;
   bool failed = true;
   
-  this->Lock();
+  Floq::BDB::Lock();
   
   Floq::BDB::TransactionBegin();
   
@@ -49,7 +32,7 @@ bool Floq::Queue::Push(const string& topic, const vector<string>& messages) {
   
   if(!failed) result = Floq::BDB::TransactionCommit();
   
-  this->Unlock();
+  Floq::BDB::Unlock();
   
   return result;
 }
@@ -58,7 +41,7 @@ bool Floq::Queue::Push(const vector<string>& topics, const string& message) {
   bool result = false;
   bool failed = true;
   
-  this->Lock();
+  Floq::BDB::Lock();
   
   Floq::BDB::TransactionBegin();
   
@@ -74,7 +57,7 @@ bool Floq::Queue::Push(const vector<string>& topics, const string& message) {
   
   if(!failed) result = Floq::BDB::TransactionCommit();
   
-  this->Unlock();
+  Floq::BDB::Unlock();
   
   return result;
 }
@@ -82,28 +65,29 @@ bool Floq::Queue::Push(const vector<string>& topics, const string& message) {
 bool Floq::Queue::Get(const string& topic, string& message) {
   bool result = false;
   
-  this->Lock();
+  Floq::BDB::Lock();
   if(Floq::BDB::Get(topic, message)) { 
     result = Floq::BDB::Out(topic);
   }
-  this->Unlock();
+  Floq::BDB::Unlock();
 }
 
+// this needs to be transaction safe
 void Floq::Queue::Get(const string& topic, vector<string>& messages, const int count) {
   string message;
-  this->Lock();
+  Floq::BDB::Lock();
   for(size_t i = 0; i < count; i++) {
     if(Floq::BDB::Get(topic, message)) {
       messages.push_back(message);
     }
   }
-  this->Unlock();
+  Floq::BDB::Unlock();
 }
 
 int Floq::Queue::Size(const string& topic) {
   int result;
-  this->Lock();
+  Floq::BDB::Lock();
   result = Floq::BDB::Count(topic);
-  this->Unlock();
+  Floq::BDB::Unlock();
   return result;
 }

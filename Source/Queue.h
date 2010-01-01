@@ -8,15 +8,8 @@ using namespace std;
 
 namespace Floq {
   class Queue : public Floq::BDB {
-  protected:
-    pthread_mutex_t mutex;
-    
   public:
     Queue(const string& path, const string& name);
-    ~Queue();
-    
-    void Lock();
-    void Unlock();
     
     bool Push(const string& topic, const string& message);
     bool Push(const string& topic, const vector<string>& messages);
