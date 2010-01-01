@@ -18,14 +18,12 @@ namespace Floq {
     bool Remove(const string& name, const string& value);
     bool Contains(const string& name, const string& value);
     
+    bool Get(const string& name, vector<string>& results);
     bool Intersect(const vector<string>& names, vector<string>& results);
     bool Union(const vector<string>& names, vector<string>& results);
     bool Difference(const vector<string>& names, vector<string>& results);
     
     int Size(const string& name);
-    
-  protected:
-    bool Search(const string& name, const string& value, BDBCUR* cursor);
   };
 }
 

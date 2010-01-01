@@ -98,21 +98,6 @@ bool BDB::Get(const string& key, vector<string>& results) {
 	}
 }
 
-bool BDB::Get(BDBCUR* cursor, string& result) {
-	int b_size;
-	void* buffer;
-	
-	buffer = tcbdbcurval(cursor, &b_size);
-	
-	if(buffer == NULL) {
-		return false;
-	} else {
-		result.assign((char*)buffer, b_size);
-		free(buffer);
-		return true;
-	}
-}
-
 bool BDB::Put(const string& key, const string& value) {
 	return tcbdbput(this->database, key.c_str(), key.size(), value.c_str(), value.size());
 }

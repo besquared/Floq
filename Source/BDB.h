@@ -26,14 +26,14 @@ namespace Floq {
 		void Lock();
     void Unlock();
     
-		bool Get(const string& key, string& result);	
-    bool Get(BDBCUR* cursor, string& result);
-    bool Get(const string& key, vector<string>& results);
-		bool Put(const string& key, const string& value);
-		bool PutDup(const string& key, const string& value);
-		bool Add(const string& key, const int value, int& result);
-		bool Out(const string& key);
-    int Count(const string& key);
+    virtual bool Keys(const string& prefix);
+		virtual bool Get(const string& key, string& result);	
+    virtual bool Get(const string& key, vector<string>& results);
+		virtual bool Put(const string& key, const string& value);
+		virtual bool PutDup(const string& key, const string& value);
+		virtual bool Add(const string& key, const int value, int& result);
+		virtual bool Out(const string& key);
+    virtual int Count(const string& key);
     
     bool TransactionBegin();
     bool TransactionAbort();
